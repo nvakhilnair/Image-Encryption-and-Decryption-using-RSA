@@ -1,0 +1,62 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QWidget
+from Image import img_process
+from PyQt5.QtWidgets import QMessageBox
+
+class Ui_encrypt(QWidget):
+    def setupUi(self, encrypt):
+        encrypt.setObjectName("encrypt")
+        encrypt.resize(320, 233)
+        self.label_input = QtWidgets.QLabel(encrypt)
+        self.label_input.setGeometry(QtCore.QRect(20, 50, 121, 21))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_input.setFont(font)
+        self.label_input.setObjectName("label_input")
+        self.pushButton_select = QtWidgets.QPushButton(encrypt)
+        self.pushButton_select.setGeometry(QtCore.QRect(180, 50, 88, 21))
+        self.pushButton_select.setObjectName("pushButton")
+        self.pushButton_select.clicked.connect(self.select_image)
+        self.label_text = QtWidgets.QLabel(encrypt)
+        self.label_text.setGeometry(QtCore.QRect(10, 110, 291, 16))
+        self.label_text.setObjectName("label_text")
+        self.pushButton_Generate = QtWidgets.QPushButton(encrypt)
+        self.pushButton_Generate.setGeometry(QtCore.QRect(110, 160, 88, 27))
+        self.pushButton_Generate.setObjectName("pushButton_Generate")
+        self.pushButton_Generate.clicked.connect(self.Generate_cipher)
+
+        self.retranslateUi(encrypt)
+        QtCore.QMetaObject.connectSlotsByName(encrypt)
+
+
+    def select_image(self):
+        global input_Dir
+        input_Dir = list(QFileDialog.getOpenFileName(self, "Select Directory","Image files (*.jpg *.png)"))
+        input_Dir = input_Dir[0]
+    
+    def Generate_cipher(self):
+        output = img_process(input_Dir,E_KEY,N_MOD)
+        txt_file = open("ciphered.txt","w")
+        txt_file.writelines(str(output))
+        txt_file.close()
+        QMessageBox.about(self, "Done", "Text file is saved")
+
+
+    def retranslateUi(self, encrypt):
+        _translate = QtCore.QCoreApplication.translate
+        encrypt.setWindowTitle(_translate("encrypt", "Image Encrypter"))
+        self.label_input.setText(_translate("encrypt", "Select the image"))
+        self.pushButton_select.setText(_translate("encrypt", "Select"))
+        self.label_text.setText(_translate("encrypt", "Cipher will be saved as text file in same directory "))
+        self.pushButton_Generate.setText(_translate("encrypt", "Generate"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    encrypt = QtWidgets.QDialog()
+    ui = Ui_encrypt()
+    ui.setupUi(encrypt)
+    encrypt.show()
+    sys.exit(app.exec_())

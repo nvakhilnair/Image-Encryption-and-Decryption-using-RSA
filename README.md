@@ -1,7 +1,7 @@
 
 # Image Encryption and Decryption using RSA
 
-GUI application lets you create two separate python based GUI application for encryption and decryption of image.
+GUI application lets you create two separate python based GUI applications for encryption and decryption of images.
 ## Installation
 
 Install my-project with npm
